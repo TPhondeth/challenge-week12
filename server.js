@@ -17,26 +17,8 @@ db.connect(function (error) {
     if (error) throw error;
     console.log("Welcome to Employee Manager");
 
-    db.query("SELECT * from role", function (error, res) {
-        roles = res.map(role => ({
-            name: role.title,
-            value: role.id
-        }))
-    })
-    db.query("SELECT * from department", function (error, res) {
-        departments = res.map(dep => ({
-            name: dep.name,
-            value: dep.id
-        }))
-    })
-    db.query("SELECT * from employee", function (error, res) {
-        employees = res.map(emp => ({
-            name: `${emp.first_name} ${emp.last_name}`,
-            value: emp.id
-        }))
-    })
     inquirerPrompt();
-})
+});
 
 function inquirerPrompt() {
     inquirer.prompt({
@@ -109,3 +91,35 @@ function mainMenu(options) {
     };
 };
 
+function viewAllDepartments() {
+    db.query("SELECT * FROM department", function (error, res) {
+        departments = res.map(dep => ({
+            name: dep.name,
+            value: dep.id
+        }))
+        console.table(res);
+        // endOrMain();
+    });
+};
+
+function viewAllRoles() {
+    db.query("SELECT * FROM role", function (error, res) {
+        roles = res.map(role => ({
+            name: role.title,
+            value: role.id
+        }))
+        console.table(res);
+        endOrMain();
+    });
+};
+
+function viewAllEmployees() {
+    db.query("SELECT * FROM employee", function (error, res) {
+        employees = res.map(emp => ({
+            name: `${emp.first_name} ${emp.last_name}`,
+            value: emp.id
+        }))
+        console.table(res);
+        // endOrMain();
+    });
+};
