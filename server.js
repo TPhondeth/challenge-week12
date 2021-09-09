@@ -4,7 +4,7 @@ const db = require('./db/connection');
 const consoleTable = require('console.table');
 const confirm = require('inquirer-confirm');
 
-// Connection to MySQL
+// Connection to MySQL 
 db.connect(function (error) {
     if (error) throw error;
     console.log("Welcome to Employee Manager");
