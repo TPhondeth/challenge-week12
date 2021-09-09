@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
+const confirm = require('inquirer-confirm');
 const PORT = process.env.PORT || 3001;
 
 // MySQL information
