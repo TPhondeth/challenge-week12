@@ -17,28 +17,32 @@ db.connect(function (error) {
     if (error) throw error;
     console.log("Welcome to Employee Manager");
 
+    // DB Query for roles
     db.query("SELECT * from role", function (error, res) {
         roles = res.map(role => ({
             name: role.title,
             value: role.id
         }))
     })
+    // DB Query for departments
     db.query("SELECT * from department", function (error, res) {
         departments = res.map(dep => ({
             name: dep.name,
             value: dep.id
         }))
     })
+    // DB Query for employees
     db.query("SELECT * from employee", function (error, res) {
         employees = res.map(emp => ({
             name: `${emp.first_name} ${emp.last_name}`,
             value: emp.id
         }))
     })
-    inquirerPrompt();
+    initialPrompt();
 });
 
-function inquirerPrompt() {
+// Function for Initial Prompt
+function initialPrompt() {
     inquirer.prompt({
         type: "list",
         message: "What would you like to do?",
@@ -81,6 +85,7 @@ function inquirerPrompt() {
     });
 };
 
+// Function for Main Menu
 function mainMenu(options) {
     switch (options) {
         case "viewAllDepartments":
@@ -109,6 +114,7 @@ function mainMenu(options) {
     };
 };
 
+// Function to View all Departments
 function viewAllDepartments() {
     db.query("SELECT * FROM department", function (error, res) {
         console.table(res);
@@ -116,6 +122,7 @@ function viewAllDepartments() {
     });
 };
 
+// Function to View all Roles
 function viewAllRoles() {
     db.query("SELECT * FROM role", function (error, res) {
         console.table(res);
@@ -123,6 +130,7 @@ function viewAllRoles() {
     });
 };
 
+// Function to View all Employees
 function viewAllEmployees() {
     db.query("SELECT * FROM employee", function (error, res) {
         console.table(res);
@@ -130,6 +138,7 @@ function viewAllEmployees() {
     });
 };
 
+// Function to Add Department
 function addDepartment() {
     inquirer.prompt([{
             type: "input",
@@ -151,6 +160,7 @@ function newDepartment(data) {
     endOrMain();
 };
 
+// Function to Add Role
 function addRole() {
     inquirer.prompt([{
                 type: "input",
@@ -186,7 +196,7 @@ function addNewRole(data) {
     endOrMain();
 };
 
-
+// Function to Add Employee
 function addEmployee() {
     inquirer.prompt([{
                 type: 'input',
@@ -215,4 +225,17 @@ function addEmployee() {
             newEmployee(response);
         });
 };
+
+function newEmployee(data) {
+    db.query("INSERT INTO employee SET ?", {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        role_id: data.title,
+        manager_id: data.manager
+    }, function (error, res) {
+        if (error) throw error;
+    });
+    endOrMain();
+}
+
 
